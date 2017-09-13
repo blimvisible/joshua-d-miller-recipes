@@ -26,14 +26,12 @@
             <string>Logitech Options</string>
             <key>RestartAction</key>
             <string>RequireRestart</string>
-    	<key>description</key>
-    	<string>Logitech Options lets you customize gesture controls for Logitech touch products. It also adds enhanced key functions for Logitech keyboards, and notification for device-specific status features such as battery level, key backlighting level, and Caps Lock.</string>
+    	    <key>description</key>
+    	    <string>Logitech Options lets you customize gesture controls for Logitech touch products. It also adds enhanced key functions for Logitech keyboards, and notification for device-specific status features such as battery level, key backlighting level, and Caps Lock.</string>
             <key>name</key>
             <string>%NAME%</string>
             <key>display_name</key>
             <string>%NAME%</string>
-    	<key>unattended_install</key>
-    	<true/>
     	</dict>
     </dict>
     <key>MinimumVersion</key>
@@ -42,15 +40,6 @@
     <string>com.github.joshua-d-miller.download.logitechoptions</string>
     <key>Process</key>
     <array>
-        <dict>
-            <key>Arguments</key>
-            <dict>
-                <key>pattern</key>
-                <string>%RECIPE_CACHE_DIR%/LogiMgr/LogiMgr Installer*</string>
-            </dict>
-            <key>Processor</key>
-            <string>FileFinder</string>
-        </dict>
         <dict>
             <key>Arguments</key>
             <dict>
@@ -85,10 +74,65 @@
         <dict>
             <key>Arguments</key>
             <dict>
+                <key>flat_pkg_path</key>
+                <string>%RECIPE_CACHE_DIR%/Logitech Options.mpkg</string>
+                <key>destination_path</key>
+                <string>%RECIPE_CACHE_DIR%/Unpack/</string>
+            </dict>
+            <key>Processor</key>
+            <string>FlatPkgUnpacker</string>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>pkgroot</key>
+                <string>%RECIPE_CACHE_DIR%/application_payload</string>
+                <key>pkgdirs</key>
+                <dict/>
+            </dict>
+            <key>Processor</key>
+            <string>PkgRootCreator</string>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>pkg_payload_path</key>
+                <string>%RECIPE_CACHE_DIR%/Unpack/LogiMgrComponent.pkg/Payload</string>
+                <key>destination_path</key>
+                <string>%RECIPE_CACHE_DIR%/application_payload</string>
+                <key>purge_destination</key>
+                <true/>
+            </dict>
+            <key>Processor</key>
+            <string>PkgPayloadUnpacker</string>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>faux_root</key>
+                <string>%RECIPE_CACHE_DIR%/application_payload</string>
+                <key>installs_item_paths</key>
+                <array>
+                    <string>/Applications/Logi Options.app</string>
+                    <string>/Library/PreferencePanes/Logi Options Launcher.prefPane</string>
+                </array>
+            </dict>
+            <key>Processor</key>
+            <string>MunkiInstallsItemsCreator</string>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>MunkiPkginfoMerger</string>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
                 <key>additional_pkginfo</key>
                 <dict>
                     <key>version</key>
                     <string>%version%</string>
+                    <key>minimum_os_version</key>
+                    <string>10.10.0</string>
                 </dict>
             </dict>
             <key>Processor</key>
